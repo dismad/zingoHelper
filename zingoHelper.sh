@@ -2,7 +2,7 @@
 
 myfield="${1}"   #1 represent 1st argument
 address="${2}"
-amount="${3}"     #2 represent 2st argument
+amount="${3}"     
 memo="${4}"
 
 
