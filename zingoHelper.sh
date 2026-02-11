@@ -65,8 +65,8 @@ elif [ "$myfield" ==  "addresses" ]; then
 
 elif [ "$myfield"  == "transactions" ]; then
 
-      ./zingo-cli $myconfig $myfield | tail -n +3 | head -n -2 | grep 'txid\|datetime\|blockheight\|kind' | sed '/kind/a --------------' > temp
-      cat temp
+      ./zingo-cli $myconfig $myfield | tail -n +4 | head -n -2 #| grep 'txid\|datetime\|blockheight\|kind' | sed '/kind/a --------------' > temp
+      #cat temp
 
 else
       echo "Try another command!"
