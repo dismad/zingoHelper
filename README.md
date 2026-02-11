@@ -8,6 +8,7 @@ Needs a fully synced zebrad, a compiled and running zaino or lightwalletd server
 
 ## Examples
 
-![Screenshot_2024-12-09_21-59-28](https://github.com/user-attachments/assets/4c2c4c4c-16c8-4f1f-aacb-21b7ce894520)
+Once you loaded a seed phrase or viewkey and are fully synced, you can run exportToJSON.sh to export all transaction data to json.
 
-![Screenshot_2024-12-10_09-06-04](https://github.com/user-attachments/assets/bfce44b8-1c6d-4f40-8aca-f1246d464f6a)
+<img width="666" height="378" alt="Screenshot_2026-02-10_22-35-45" src="https://github.com/user-attachments/assets/cd70313f-1b18-42bd-9e4f-7f756218e1c7" />
+<img width="1078" height="262" alt="Screenshot_2026-02-10_22-37-22" src="https://github.com/user-attachments/assets/8bac0520-fd60-404a-9c8b-4c1f9c9090d2" />
