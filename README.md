@@ -3,7 +3,7 @@ Helper scripts for zebrad, zaino, and zingo-cli
 
 ## Reqs
 
-Needs a fully synced zebrad, a compiled and running zaino or lightwalletd server, and a compiled zingo-cli.
+Needs a fully synced lightwalletd server, and a compiled zingo-cli. I recommend using a local zebrad + lwd setup for best privacy and performance.
 
 
 ## Examples
