@@ -311,6 +311,6 @@ done
 echo "       ]" >> transactions.json
 
 rm test
-#rm txidDump
+rm txidDump
 
 echo "\"transactions.json\" written!"
