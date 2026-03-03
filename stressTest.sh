@@ -7,48 +7,43 @@ amount=100000
 ua="utest1jeryw4al7wtv7efn8yh2apucuy48ss0lwf02pdnrnf69wnp0c5zs02j0t395kwdeqwm60jgjhjkrh606470ptxv0kygfwpdxfczaxl3k"
 
 
+j=0
+
+echo
+echo "rescanning for latest transactions ..."
+echo
+./zingo-cli $myconfig "--waitsync" "rescan" > recsan.log
+#sleep 10s
+./zingo-cli $myconfig "--waitsync" "transactions" > oHeight.log
+oldHeight=$(cat oHeight.log | tail -n +4 | head -n -2 | grep 'txid\|datetime\|blockheight\|kind' | sed '/kind/a --------------' | tail -n -3 | head -n -2 | cut -d ":" -f2 | column -t)
+minRequired=$(echo "$oldHeight + 1" | bc)
+
 for (( i=1; i<100; i++ ))
 do
 	amount=1000000
+        
+		./zingo-cli $myconfig "--waitsync" "sync" "run" > sync.log
 
-	
-        ./zingo-cli $myconfig "transactions" "--waitsync" > temp.log
-        oldHeight=$(cat temp.log | tail -n +3 | head -n -2 | grep 'txid\|datetime\|blockheight\|kind' | sed '/kind/a --------------' | tail -n -3 | head -n -2 | cut -d ":" -f2 | column -t)
-        minRequired=$(echo "$oldHeight + 1" | bc)
-        ./zingo-cli $myconfig "height" "--waitsync" > myheight.log
-        currentHeight=$(cat myheight.log | tail -n +3 | head -n -2 | jq -r '.height')
+		#sleep 10s
 
-	echo
-	echo "Verify last transaction has confirmed more than 1 times:"
-	echo
-	echo "old: $oldHeight"
-	echo "new: $currentHeight"
-	echo "-------------------"
-	result=$(echo "$currentHeight - $oldHeight" | bc)
-	
-	if [ "$result" -gt "1" ]; then
-		echo "result: $result ✅"
-		echo	
-	else
-		echo "result: $result ❌"
+		#./zingo-cli $myconfig "--waitsync" "sync" "poll" > sync.log
+                result=$(cat sync.log)
+
+		echo "debug: $result"
 		echo
-	fi
 
-	if [ "$currentHeight" -gt "$minRequired" ]; then
-		
-		./zingo-cli $myconfig "--waitsync" "rescan" > rescan.log
-		sleep 20s
-
-		result=$(./zingoHelper.sh quicksend $ua $amount "memo_$i")
+		result=$(./zingoHelper.sh quicksend $ua $amount "memo_$j")
 		
         	echo "transaction $i :"
+		echo "memo $j :"
 		echo "$result"
 		echo
-	else
-		now=$(date +"%T")
-		echo
-		echo "Not enough confirmations from last transaction. ($now)"
-	fi 
+		echo "=> txid submitted to mempool successfully!"
+		j=$(( $j + 1 ))
 
-        sleep 3m
+	echo "=> waiting 300 seconds for tx to confirm ... "
+	echo
+        sleep 300s
+	echo "running sync now ..."
+	echo
 done
