@@ -5,10 +5,9 @@ address="${2}"
 amount="${3}"     #2 represent 2st argument
 memo="${4}"
 
-#--chain testnet --server https://testnet.zec.rocks:443 --data-dir /home/zktails/Documents/zingolib
-#--server http://127.0.0.1:8137 --data-dir /media/zebra5/zebra/.cache/lightwalletd
+#--chain testnet --server https://testnet.zec.rocks:443 --data-dir /home/<username>/Documents/zingolib
 
-myconfig="--chain testnet --server https://testnet.zec.rocks:443 --data-dir /home/zktails/Documents/scripts/zingoHelper/"
+myconfig="--chain testnet --server https://testnet.zec.rocks:443"
 
 if [ "$myfield" == "help" ]; then
 
@@ -40,7 +39,7 @@ elif [ "$myfield" == "spendable_balance" ]; then
 
 elif [ "$myfield" == "messages" ]; then
 
-        ./zingo-cli $myconfig "--waitsync" $myfield | tail -n +3 | head -n -2 | jq .value_transfers | jq '. | select( . != null )' | jq .[].memos.[]
+        ./zingo-cli $myconfig "--waitsync" $myfield | tail -n +3 | head -n -2 | jq .value_transfers | jq '. | select( . != null )' | jq -r '.[].memos.[]'
 
 elif [ "$myfield" == "sync" ]; then
 
@@ -53,8 +52,8 @@ elif [ "$myfield" == "confirm" ]; then
 elif [ "$myfield" == "quicksend" ]; then
         memo="\"$memo\""
 
-        ./zingo-cli $myconfig "--waitsync" $myfield $address $amount "$memo" > temp
-        cat temp | tail -n +3 | head -n -2 | jq  
+        ./zingo-cli $myconfig "--waitsync" $myfield $address $amount "$memo" > quicksend.log
+        cat quicksend.log | tail -n +3 | head -n -2 | jq  
 
 
 elif [ "$myfield" ==  "addresses" ]; then
@@ -65,8 +64,13 @@ elif [ "$myfield" ==  "addresses" ]; then
 
 elif [ "$myfield"  == "transactions" ]; then
 
-      ./zingo-cli $myconfig $myfield | tail -n +4 | head -n -2 #| grep 'txid\|datetime\|blockheight\|kind' | sed '/kind/a --------------' > temp
-      #cat temp
+      ./zingo-cli $myconfig "--waitsync" $myfield | tail -n +4 | head -n -2 #> txidDump #| grep 'txid\|datetime\|blockheight\|kind' | sed '/kind/a --------------' > temp
+
+elif [ "$myfield"  == "transactions_tojson" ]; then
+
+      ./exportToJSON.sh
+
+       echo "type: \"jq '.' transactions.json\" to view"
 
 else
       echo "Try another command!"
